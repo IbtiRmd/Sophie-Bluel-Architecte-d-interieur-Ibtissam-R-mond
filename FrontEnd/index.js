@@ -1,3 +1,8 @@
+
+const imageElement = document.getElementById("upload_img");
+const titleElement = document.getElementById("textfield_work_title");
+const categoryElement = document.getElementById("category");
+
 //fonction pour récupérer les projets de l'api
 async function getProjects()
 {
@@ -185,6 +190,7 @@ document.querySelectorAll('.js-modal').forEach(a => {a.addEventListener('click' 
 // ajout modale 2
 document.getElementById('ajout').addEventListener('click' , function()
 {
+	checkEmptyFields();
 	document.getElementById("first-modal").classList.add("hidden");
 	document.getElementById("modale_two").classList.remove("hidden");
 	//Back button listener
@@ -292,24 +298,45 @@ function previewImg()
 		paragrapheicon.classList.add("hidden")
 	} 
 }
+function checkEmptyFields(){
+	//Listener 
+	titleElement.addEventListener('input' , function(event)
+	{
+		SetConfirmButtonColor()
+	}	)
 
+	imageElement.addEventListener('input' , function(event)
+	{
+		SetConfirmButtonColor()
+	}	)
+
+	categoryElement.addEventListener('input' , function(event)
+	{
+		SetConfirmButtonColor()
+	}	)
+
+}
+function SetConfirmButtonColor(){
+	const buttonConfirm = document.getElementById("confirm-button");
+	if(!checkInput()){
+		//Je colorie le bouton en vert
+		buttonConfirm.classList.add("confirmDisable")
+	}else{
+		//Je colorie le bouton gris
+		buttonConfirm.classList.remove("confirmDisable")
+
+	}
+}
 //ajouter les projects à l'api
 async function uploadWork()
 {
 
 	let isSuccess = false;
-
-	
-
-	const imageElement = document.getElementById("upload_img").files[0];
-	const titleElement = document.getElementById("textfield_work_title").value;
-	const categoryElement = document.getElementById("category").value;
-
-	// Construction du formData à envoyer
+	//Construction du formData à envoyer
 	const formData = new FormData();
-	formData.append("image", imageElement);
-	formData.append("title", titleElement);
-	formData.append("category", categoryElement);
+	formData.append("image", imageElement.files[0]);
+	formData.append("title", titleElement.value);
+	formData.append("category", categoryElement.value);
   
 	// Appel de la fonction fetch avec toutes les informations nécessaires
 	const tokenValue = localStorage.getItem('token');
@@ -324,10 +351,11 @@ async function uploadWork()
 	});
 
 	//Listener sur input
-	/*imageElement.addEventListener('input' , function(e)
+	console.error("I'm listening bob")
+	titleElement.addEventListener('input' , function(event)
 	{
 		console.log("halahala");
-	}	)*/
+	}	)
 
 	if (response.ok) 
 	{
