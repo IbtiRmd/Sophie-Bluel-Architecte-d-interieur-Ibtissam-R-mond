@@ -18,7 +18,7 @@
 
 										<!--         BUTTON MODIFIER             -->
 
-	<a href="#modale" class="js-modal" > <i class="fa-regular fa-pen-to-square"></i>Modifier</a>
+	<!--<a href="#modale" class="js-modal" > <i class="fa-regular fa-pen-to-square"></i>Modifier</a>-->
 
 										<!--         MODAL           -->
 
@@ -34,12 +34,14 @@
 			
 			
 
-			<div class="galery" id="projects-galery"></div>
+			<div class=" galery-modal" id="projects-galery"></div>
 
 			<div class="modal-content js-modal-stop">
 				
 				
 				<div class="ajt-photo">
+
+
 					<button id="ajout" class="ajoutPhoto" href="#add-modal" >Ajouter une photo</button>
 
 					<!-- <p id="delete-gallery">Supprimer la galerie</p> -->
@@ -54,6 +56,7 @@
 		<div id="modale_two" class="modal-wrapper js-modal-stop hidden">
 
 			<button id = "js-modal-close" class="js-modal-close"><i class="fa-solid fa-xmark"></i></button>
+			<button id = "js-modal-back" class="js-modal-back"><i class="fa-sharp fa-solid fa-arrow-left fa-lg"></i></button>
 	
 			<h3 id="titlemodale">Ajout Photo</h3>
 
@@ -64,14 +67,18 @@
 					 <i id="paraicon" class="fa-regular fa-image fa-4x"></i>
 
 
-					<input id="upload_img" type="file" name="myImage" accept="image/png, image/gif, image/jpeg" />
+					<!--<input id="upload_img" type="file" name="myImage" accept="image/png, image/gif, image/jpeg" />-->
+
+					<label class="picture_input ">+ Ajout photo<input class="file_upload" id="upload_img" name="file_upload hidden" type="file" accept=".jpg, .png"/></label>
 					
 					<img src="#" id="previewimg" class="hidden" alt="">
 
 					<p id="paragimg">jpg, png : 4mo max</p>
+
+					<span id="error-img"></span>
 			</div>
 
-			<span id="error-img"></span>
+			
 
 
 										<!--         TITRE-PROJET           -->
@@ -81,10 +88,12 @@
 
 						<label for="title_picture">Titre</label>
 						<input type="text" id="textfield_work_title" name="title_picture"/>
+
+						<span id="error-title"></span>
+
 			</div>
 
-			<span id="error-title"></span>
-
+			
 										<!--         CATEGORY-PROJET           -->
 
 			<div class="category">
@@ -95,9 +104,11 @@
 					<option id="Apartement_option" value="2">Appartement</option>
 					<option id="hotel_restaurant_option" value="3">hôtel & restaurant</option>
 				</select>
+
+				<span id="error-category"></span>
 			</div>
 
-			<span id="error-category"></span>
+			
 
 
 											<!--         BUTTON-AJOUTER          -->
@@ -158,7 +169,14 @@
 						<!--         PORTFOLIO-WORKS           -->
 
 	<section id="portfolio">
+
+		<div class="projet-m">
+
 		<h2>Mes Projets</h2>
+
+		<a href="#modale" class="js-modal" > <i class="fa-regular fa-pen-to-square"></i>Modifier</a>
+
+		</div>
 		
 		<div class="filtre" id="filtres"></div>
 		

@@ -1,6 +1,3 @@
-//verification de la compilation
-console.log("hello2");
-
 //fonction pour récupérer les projets de l'api
 async function getProjects()
 {
@@ -11,7 +8,6 @@ async function getProjects()
     })
     .then(function(works)
     {
-		console.log(works)
         return works;
     })
 
@@ -35,37 +31,15 @@ async function getCategories()
 //fonction init pour lancer l'affichage des boutons 
 async function init()
 {  
-    const works = await getProjects();
-    /*console.log(works[0]);*/
 	afficherButtons();
 	logoutInit();	
+	filterAndShowWorks("tous");
 }
 
 //initialisation
 function logoutInit()
 {
 	document.querySelector(".logout").addEventListener('click' , function(){localStorage.removeItem('token');})
-}
-
-//Afficher les projets à la page d'accueil
-async function addProjects()
-{
-        const works = await getProjects();
-       	for(const work of works) 
-        {
-            const figure =  document.createElement('figure');
-            const img = document.createElement('img');
-            const figcaption = document.createElement('figcaption');
-
-            img.src = work.imageUrl;
-            img.alt = work.title;
-            figcaption.innerHTML=work.title; 
-
-            figure.appendChild(img);
-            figure.appendChild(figcaption);
-
-            document.getElementById("works").appendChild(figure);
-        }
 }
 
 //filtrer les projects et les afficher
@@ -98,12 +72,10 @@ async function filterAndShowWorks( categoryId )
 
 		}			
 	}
-	
 }
 
 //appeler init pour initialiser
 init();
-
 
 // creation des buttons pour filtrer les projects
 async function afficherButtons()
@@ -138,8 +110,6 @@ async function afficherButtons()
 	else 
 		{
 			filterAndShowWorks("tous")
-			
-
 			document.querySelector(".login").classList.add("hidden");
 			document.querySelector(".logout").classList.remove("hidden");
 			document.querySelector(".js-modal").classList.remove("hidden");
@@ -147,14 +117,14 @@ async function afficherButtons()
 		}
 }
 
+/* ---MODALE--- */
 
-/* LA MODALE */
-
-//ouverture modale
 let modal = null;
 
+//OPENING MODAL
 const openModal = function(e)
 {
+	//Modal setup
 	e.preventDefault();
 	const target = document.querySelector(e.target.getAttribute('href'));
 	console.log(target);
@@ -163,34 +133,35 @@ const openModal = function(e)
 	target.setAttribute('aria-modal', 'true');
 	modal = target
 	modal.addEventListener('click' , closeModal)
+	//Close button listener
 	modal.querySelectorAll('.js-modal-close').forEach(a => {
 		a.addEventListener('click' , closeModal)
-		 })
+	})
+	//Stop Propagation
 	modal.querySelectorAll('.js-modal-stop').forEach(a => {
 		a.addEventListener('click' , stopPropagation)
-		 })
+	})
+	//Now we add the project to the modal
 	addProjectsModal();
-	
-
 }
 
-//fermeture modale
+//CLOSING MODAL
 const closeModal = function(e)
 {
-	//console.error("Closing modal")
 	if(modal === null) return
-	e.preventDefault;
+	//La modal n'est pas nulle donc on la ferme
+	e.preventDefault();
 	modal.style.display= 'none';
 	modal.setAttribute('aria-hidden', 'true');
 	modal.removeAttribute('aria-modal');
 	modal.removeEventListener('click' , closeModal)
-	modal.querySelectorAll('.js-modal-stop').forEach(a => {removeEventListener('click' , stopPropagation) });
+	modal.querySelectorAll('.js-modal-stop').forEach(() => {
+		removeEventListener('click' , stopPropagation) 
+	});
 	modal = null
 
 	document.getElementById("first-modal").classList.remove("hidden");
-	document.getElementById("modale_two").classList.add("hidden");
 }
-
 
 //stopper la fermeture au click
 const stopPropagation = function(e)
@@ -216,25 +187,33 @@ document.getElementById('ajout').addEventListener('click' , function()
 {
 	document.getElementById("first-modal").classList.add("hidden");
 	document.getElementById("modale_two").classList.remove("hidden");
-		
+	//Back button listener
+	modal.querySelectorAll('.js-modal-back').forEach(a => {
+		a.addEventListener('click' , function()  
+		{
+			document.getElementById("modale_two").classList.add("hidden");
+			document.getElementById("first-modal").classList.remove("hidden");
+		})
+	})
 })
 	
 //ajouter des projets dans la modale
 async function addProjectsModal()
 {
-       const works = await getProjects();
+	document.getElementById("modale_two").classList.add("hidden");
+	document.getElementById("first-modal").classList.remove("hidden");
+    const works = await getProjects();
 
-		document.getElementById("projects-galery").innerHTML = "";
+	document.getElementById("projects-galery").innerHTML = "";
 		
-        for(const work of works) 
-        {
-            const figure =  document.createElement('figure');
-            const img = document.createElement('img');
-            const figcaption = document.createElement('figcaption');
-			const deleteButton = document.createElement('button');
-			const deleteIcon = document.createElement('i');
+    for(const work of works) 
+    {
+        const figure =  document.createElement('figure');
+        const img = document.createElement('img');
+		const deleteButton = document.createElement('button');
+		const deleteIcon = document.createElement('i');
 
-			deleteButton.addEventListener("click" ,async function(e)
+		deleteButton.addEventListener("click" ,async function(e)
 		{
 			e.preventDefault;
 			await deleteWork(work.id);
@@ -246,13 +225,14 @@ async function addProjectsModal()
 			img.style.width='70px';
 			img.style.height='auto';
             img.alt = work.title;
-            figcaption.innerHTML=work.title; 
-			deleteIcon.className='fa-solid fa-trash-ca';
+
+			deleteIcon.className="fa-solid fa-trash-can";
+			deleteIcon.style="color: #ffffff;";
+			
 
 			deleteButton.appendChild(deleteIcon);
 
             figure.appendChild(img);
-            figure.appendChild(figcaption);
 			figure.appendChild(deleteButton);
 			
             document.getElementById("projects-galery").appendChild(figure);
@@ -267,23 +247,24 @@ async function deleteWork(id)
 	console.log(` deleted   ${id} `)
 	const tokenValue = localStorage.getItem('token');
 	console.log(tokenValue)
-	const response = await fetch(`http://localhost:5678/api/works/${id}`, {
-    method: 'DELETE',
-    headers: 
+	const response = await fetch(`http://localhost:5678/api/works/${id}`, 
 	{
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${tokenValue}` // Utilise la valeur du token dans l'en-tête de la requête
-    }
-  });
-  if (response.ok) 
+		method: 'DELETE',
+		headers: 
 		{
-			console.log("delete accomplished");
-		}
-		else if(response.status === '401') 
-		{
-			console.log("Unauthorized");
+			'Content-Type': 'application/json',
+			'Authorization': `Bearer ${tokenValue}` // Utilise la valeur du token dans l'en-tête de la requête
+		}	
+	});
 
-		}
+	if (response.ok) 
+	{
+		console.log("delete accomplished");
+	}
+	else if(response.status == '401') 
+	{
+		console.log("Unauthorized");
+	}
 }
 
 //fin ajout dans la modale
@@ -316,7 +297,7 @@ function previewImg()
 async function uploadWork()
 {
 
-	let isSucces = false;
+	let isSuccess = false;
 
 	
 
@@ -334,33 +315,38 @@ async function uploadWork()
 	const tokenValue = localStorage.getItem('token');
 	let response = await fetch("http://localhost:5678/api/works", {
 		
-	  method: "POST",
-	  headers: {
-		'Authorization': `Bearer ${tokenValue}` // Utilise la valeur du token dans l'en-tête de la requête
-	  },
-	  body: formData,
+		method: "POST",
+		headers: {
+			// Adding Token
+			'Authorization': `Bearer ${tokenValue}` 
+		},
+		body: formData
 	});
-// a voir
+
+	//Listener sur input
+	/*imageElement.addEventListener('input' , function(e)
+	{
+		console.log("halahala");
+	}	)*/
+
 	if (response.ok) 
-		{
-			isSucces == true;
-			console.log("Ajout Accomplished");
-		}
-		else if(response.status === '401') 
-		{
-			isSucces == false;
-			console.log("Unauthorized");
-
-		}
+	{
+		isSuccess = true;
+		console.log("Ajout Accomplished");
+	}
+	else if(response.status == '401') 
+	{
+		console.log("Unauthorized");
+	}
 	
-
-	return isSucces
+	return isSuccess
 }
 
 // // button valider un project
 document.getElementById('confirm-button').addEventListener('click' , function(e)
 {
-	console.log("confirmation");
+	console.log("confirme button pressed");
+
 	if(checkInput())
 	{
 		if(uploadWork())
@@ -369,17 +355,10 @@ document.getElementById('confirm-button').addEventListener('click' , function(e)
 			addProjectsModal();
 			filterAndShowWorks('tous');
 		}
-
-		//
-		//filterAndShowWorks('tous');
-
-
 	}else{
 		console.error("Invalid input")
 	}
 })
-
-
 	
 //verifier que toutes les cases sont rempli pour permettre la validation
 function checkInput()
@@ -391,7 +370,6 @@ function checkInput()
 	const titleElement = document.getElementById("textfield_work_title").value;
 	const categoryElement = document.getElementById("category").value;
 
-
 	//**** */
 	// cibler les messages
 	const errMessImg = document.querySelector("#error-img");
@@ -401,43 +379,22 @@ function checkInput()
 	//Checking elements values
 	if(imageElement==null)
 	{
-		//showImageAsEmpty();
 		errMessImg.innerHTML = "";
-    	errMessImg.innerHTML = "Image obligatoire";
+		errMessImg.innerHTML = "Image obligatoire *";
 		isInputCorrect = false
 	}
 	if(titleElement == "")
 	{
-		//showTitleeAsEmpty();
 		errMessTitle.innerHTML = "";
-    	errMessTitle.innerHTML = "title obligatoire";
+		errMessTitle.innerHTML = "title obligatoire *";
 		isInputCorrect = false;
 	}
 	if(categoryElement == "")
 	{
 		errMessCat.innerHTML = "";
-    	errMessCat.innerHTML = "title obligatoire";
+		errMessCat.innerHTML = "title obligatoire *";
 		isInputCorrect = false;
 	}
 
 	return isInputCorrect
 }
-
-//function qui montre que la case est vide 
-/*function showImageAsEmpty()
-{ 
-	if(inputFile.value == "")
-	errMessImg.innerHTML = "";
-    errMessImg.innerHTML = "Image obligatoire";
-
-} 
-function showTitleAsEmpty()
-{ 
-	
-
-} 
-function showCategoryAsEmpty()
-{ 
-	
-
-} */
