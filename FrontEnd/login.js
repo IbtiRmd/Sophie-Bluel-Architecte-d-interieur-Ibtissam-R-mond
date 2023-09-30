@@ -25,8 +25,8 @@ function login(event)
         
             JSON.stringify (
                 {
-                    'email' : "sophie.bluel@test.tld", //elementEmail.value,
-                    'password': "S0phie"//passWord.value 
+                    'email' : elementEmail.value,
+                    'password': passWord.value 
                 }
             ) 
     }).then(function(response){
