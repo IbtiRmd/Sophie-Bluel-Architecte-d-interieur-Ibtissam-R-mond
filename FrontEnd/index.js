@@ -3,6 +3,11 @@ const imageElement = document.getElementById("upload_img");
 const titleElement = document.getElementById("textfield_work_title");
 const categoryElement = document.getElementById("category");
 
+// cibler les messages
+const errMessImg = document.querySelector("#error-img");
+const errMessTitle = document.querySelector("#error-title");
+const errMessCat = document.querySelector("#error-category");
+
 //fonction pour récupérer les projets de l'api
 async function getProjects()
 {
@@ -191,6 +196,7 @@ document.querySelectorAll('.js-modal').forEach(a => {a.addEventListener('click' 
 document.getElementById('ajout').addEventListener('click' , function()
 {
 	checkEmptyFields();
+	resetModalAddProject()
 	document.getElementById("first-modal").classList.add("hidden");
 	document.getElementById("modale_two").classList.remove("hidden");
 	//Back button listener
@@ -245,7 +251,21 @@ async function addProjectsModal()
         }
 }
 
+function resetModalAddProject()
+{
+	//Reseting input value
+	imageElement.files[0] = null;
+	categoryElement.value = "";
+	titleElement.value = "";
 
+	//Remove error message
+	RemoveCategoryErrorMessage()
+	RemoveImageErrorMessage()
+	RemoveTitleErrorMessage()
+
+	//Reset Image preview
+	ResetImageModalPreview()
+}
 
 //suppression d'un project
 async function deleteWork(id)
@@ -280,6 +300,9 @@ async function deleteWork(id)
 const inputImg = document.querySelector("#upload_img")
 inputImg.addEventListener("change", previewImg)
 
+/*const inputImgtwo = document.querySelector(".inputImgtwo")
+inputImgtwo.addEventListener("change", previewImg)*/
+
 function previewImg()
 {
 	const [file] = inputImg.files 
@@ -296,23 +319,48 @@ function previewImg()
 		paragrapheimg.classList.add("hidden")
 		const paragrapheicon = document.querySelector("#paraicon")
 		paragrapheicon.classList.add("hidden")
+		const label = document.querySelector("#label_upload")
+		label.classList.add("hidden")
 	} 
 }
+function ResetImageModalPreview()
+{
+	const previewimg = document.querySelector("#previewimg")
+	previewimg.src = ""
+	previewimg.classList.add("hidden")
+	inputImg.classList.remove("hidden")
+	const paragrapheimg =  document.querySelector("#paragimg")
+	paragrapheimg.classList.remove("hidden")
+	const paragrapheicon = document.querySelector("#paraicon")
+	paragrapheicon.classList.remove("hidden")
+	const label = document.querySelector("#label_upload")
+	label.classList.remove("hidden")
+}
+
 function checkEmptyFields(){
 	//Listener 
 	titleElement.addEventListener('input' , function(event)
 	{
 		SetConfirmButtonColor()
+		if(titleElement.value != ""){
+			RemoveTitleErrorMessage()
+		}
 	}	)
 
 	imageElement.addEventListener('input' , function(event)
 	{
 		SetConfirmButtonColor()
+		if(imageElement.value != ""){
+			RemoveImageErrorMessage()
+		}
 	}	)
 
 	categoryElement.addEventListener('input' , function(event)
 	{
 		SetConfirmButtonColor()
+		if(categoryElement.value != ""){
+			RemoveCategoryErrorMessage()
+		}
 	}	)
 
 }
@@ -350,13 +398,6 @@ async function uploadWork()
 		body: formData
 	});
 
-	//Listener sur input
-	console.error("I'm listening bob")
-	titleElement.addEventListener('input' , function(event)
-	{
-		console.log("halahala");
-	}	)
-
 	if (response.ok) 
 	{
 		isSuccess = true;
@@ -384,7 +425,7 @@ document.getElementById('confirm-button').addEventListener('click' , function(e)
 			filterAndShowWorks('tous');
 		}
 	}else{
-		console.error("Invalid input")
+		AddMessageError();
 	}
 })
 	
@@ -393,36 +434,46 @@ function checkInput()
 {
 	let isInputCorrect = true;
 
-	//Input element
-	const imageElement = document.getElementById("upload_img").files[0];
-	const titleElement = document.getElementById("textfield_work_title").value;
-	const categoryElement = document.getElementById("category").value;
-
-	//**** */
-	// cibler les messages
-	const errMessImg = document.querySelector("#error-img");
-	const errMessTitle = document.querySelector("#error-title");
-	const errMessCat = document.querySelector("#error-category");
-
 	//Checking elements values
-	if(imageElement==null)
+	if(imageElement.files[0]==null)
 	{
-		errMessImg.innerHTML = "";
-		errMessImg.innerHTML = "Image obligatoire *";
 		isInputCorrect = false
 	}
-	if(titleElement == "")
+	if(titleElement.value == "")
 	{
-		errMessTitle.innerHTML = "";
-		errMessTitle.innerHTML = "title obligatoire *";
 		isInputCorrect = false;
 	}
-	if(categoryElement == "")
+	if(categoryElement.value == "")
 	{
-		errMessCat.innerHTML = "";
-		errMessCat.innerHTML = "title obligatoire *";
 		isInputCorrect = false;
 	}
 
 	return isInputCorrect
+}
+function AddMessageError()
+{
+	//Checking elements values
+	if(imageElement.files[0]==null)
+	{
+		errMessImg.innerHTML = "Image obligatoire";
+	}
+	if(titleElement.value == "")
+	{
+		errMessTitle.innerHTML = "titre obligatoire *";
+	}
+	if(categoryElement.value == "")
+	{
+		errMessCat.innerHTML = "";
+		errMessCat.innerHTML = "categorie obligatoire *";
+	}
+}
+function RemoveTitleErrorMessage(){
+	errMessTitle.innerHTML = "";
+}
+
+function RemoveImageErrorMessage(){
+	errMessImg.innerHTML = "";
+}
+function RemoveCategoryErrorMessage(){
+	errMessCat.innerHTML = "";
 }

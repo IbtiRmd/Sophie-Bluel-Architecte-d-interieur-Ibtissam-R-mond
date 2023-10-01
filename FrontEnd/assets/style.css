@@ -249,6 +249,7 @@ footer nav ul {
 .hidden
 {
 	display: none;
+	visibility: hidden;
 }
 
 .filtre
@@ -327,16 +328,26 @@ footer nav ul {
 {
 	display: flex;
 	margin-left: 600px;
-	background-color: #fff;
+	background-color: #ffffff;
 	border: 0px;
 	
 
 }
 
 
+.js-modal-back
+{
+	display: flex;
+	margin-left: 10px;
+	background-color: #ffffff;
+	border: 0px;
+}
+
+
+
 .ajt-photo
 {
-	margin-top: 50px;
+	margin-top: 100px;
 	display: flex;
 	justify-content: center;
 
@@ -546,3 +557,9 @@ footer nav ul {
 {
 	background-color:  #B3B3B3;
 }
+
+input[type="file"]{
+	display: none;
+}
+
+
