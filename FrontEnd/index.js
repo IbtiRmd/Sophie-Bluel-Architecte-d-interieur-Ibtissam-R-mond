@@ -107,7 +107,7 @@ async function afficherButtons()
 			{
 				filterAndShowWorks("tous")
 			});
-					
+			//Si jamais les categorie sont changé ça reste a jour :		
 			for( const category of categories )
 			{
 				const button =  document.createElement('button');
@@ -195,6 +195,7 @@ document.querySelectorAll('.js-modal').forEach(a => {a.addEventListener('click' 
 // ajout modale 2
 document.getElementById('ajout').addEventListener('click' , function()
 {
+	//On verifie que les fields sont vide dès le début pour griser le bouton valider
 	checkEmptyFields();
 	resetModalAddProject()
 	document.getElementById("first-modal").classList.add("hidden");
@@ -209,7 +210,7 @@ document.getElementById('ajout').addEventListener('click' , function()
 	})
 })
 	
-//ajouter des projets dans la modale
+//ajouter des projets dans la modale 1
 async function addProjectsModal()
 {
 	document.getElementById("modale_two").classList.add("hidden");
@@ -227,10 +228,11 @@ async function addProjectsModal()
 
 		deleteButton.addEventListener("click" ,async function(e)
 		{
-			e.preventDefault;
+			e.preventDefault();
+			e.stopPropagation()
 			await deleteWork(work.id);
 			await addProjectsModal();
-			await filterAndShowWorks('tous');
+			addProjectsModal();
 
 		});
             img.src = work.imageUrl;
@@ -240,7 +242,7 @@ async function addProjectsModal()
 
 			deleteIcon.className="fa-solid fa-trash-can";
 			deleteIcon.style="color: #ffffff;";
-			
+		
 
 			deleteButton.appendChild(deleteIcon);
 
@@ -310,6 +312,7 @@ function previewImg()
 	{
 		const srcimg = URL.createObjectURL(file)
 		console.log(srcimg)
+		
 		const previewimg = document.querySelector("#previewimg")
 		console.log(previewimg)
 		previewimg.src = srcimg
@@ -341,6 +344,7 @@ function checkEmptyFields(){
 	//Listener 
 	titleElement.addEventListener('input' , function(event)
 	{
+		//definir la couleur du button  
 		SetConfirmButtonColor()
 		if(titleElement.value != ""){
 			RemoveTitleErrorMessage()
@@ -418,13 +422,15 @@ document.getElementById('confirm-button').addEventListener('click' , function(e)
 
 	if(checkInput())
 	{
+		//On essaie d'ajouter un work a l'api
 		if(uploadWork())
 		{
+			//succés => on ferme la modal
 			closeModal(e);
-			addProjectsModal();
+			//Refresh le screen
 			filterAndShowWorks('tous');
 		}
-	}else{
+	}else{ //Les input sont vide ou incorrect
 		AddMessageError();
 	}
 })

@@ -138,10 +138,11 @@ li:hover {
 {
 	display: flex;
 	flex-wrap: wrap;
-	width: 500px;
-	justify-content: center;
-	padding-left: 60px;
-	gap: 4px;
+	width: 350px;
+	/*justify-content: center;*/
+	padding-left: 160px;
+	column-gap: 8px;
+	row-gap: 8px;
 
 
 }
@@ -347,7 +348,7 @@ footer nav ul {
 
 .ajt-photo
 {
-	margin-top: 100px;
+	margin-top: 10px;
 	display: flex;
 	justify-content: center;
 
@@ -563,3 +564,22 @@ input[type="file"]{
 }
 
 
+#previewimg 
+{
+	width: auto;
+	height: 210px;
+}
+
+
+.center
+{
+	margin-top: 100px;
+	width:350px;
+}
+
+
+.centreTwo
+{
+	margin-top: 100px;
+	width: 350px;
+}
