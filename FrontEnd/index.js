@@ -95,6 +95,7 @@ async function afficherButtons()
 			document.querySelector(".login").classList.remove("hidden");
 			document.querySelector(".logout").classList.add("hidden");
 			document.querySelector(".js-modal").classList.add("hidden");
+			document.querySelector(".edit_mode").classList.add("hidden");
 
 			const categories = await getCategories();
 
@@ -106,7 +107,32 @@ async function afficherButtons()
 			buttonTous.addEventListener("click" , function()
 			{
 				filterAndShowWorks("tous")
+
+				const btn = document.querySelectorAll("#filtres button")
+
+				
+				
+						btn.forEach(function(element)
+					{
+						element.classList.remove("hello")
+					});
+
+					
+					buttonTous.classList.add("hello");
+				
+
 			});
+
+			
+
+			
+			
+
+			/*buttonTous.addEventListener('click' , () => {
+				console.log("css ")
+				buttonTous.classList.add("hello")
+			});*/
+
 			//Si jamais les categorie sont changé ça reste a jour :		
 			for( const category of categories )
 			{
@@ -114,7 +140,20 @@ async function afficherButtons()
 				button.innerHTML=category.name;
 				button.id=category.name;
 				document.getElementById("filtres").appendChild(button);
-				button.addEventListener("click" , function(){filterAndShowWorks(category.id)});
+
+				const btn = document.querySelectorAll('#filtres button')
+
+				button.addEventListener("click" , function()
+				{
+					btn.forEach(function(element)
+					{
+						element.classList.remove("hello")
+					});
+
+					filterAndShowWorks(category.id);
+					button.classList.add("hello");
+				});
+				
 			}
 		}
 	else 
@@ -123,7 +162,7 @@ async function afficherButtons()
 			document.querySelector(".login").classList.add("hidden");
 			document.querySelector(".logout").classList.remove("hidden");
 			document.querySelector(".js-modal").classList.remove("hidden");
-			
+			document.querySelector(".edit_mode").classList.remove("hidden");
 		}
 }
 
@@ -483,3 +522,13 @@ function RemoveImageErrorMessage(){
 function RemoveCategoryErrorMessage(){
 	errMessCat.innerHTML = "";
 }
+
+
+
+/****filtre button clicked */
+	
+//const btnEl = document.querySelector('.button')
+
+//btnEl.addEventListener('click' , () => {
+	//btnEl.classList.add('filtre')
+//});

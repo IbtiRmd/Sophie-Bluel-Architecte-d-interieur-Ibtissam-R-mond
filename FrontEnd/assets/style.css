@@ -48,11 +48,18 @@ table {
 }
 /** end reset css**/
 body {
-	max-width: 1140px;
-	margin:auto;
+	/*max-width: 1140px;
+	margin:auto;*/
 	font-family: 'Work Sans' ;
 	font-size: 14px;
 }
+
+.whole
+{
+	max-width: 1140px;
+	margin: auto;
+}
+
 header {
 	display: flex;
 	justify-content: space-between;
@@ -249,7 +256,8 @@ footer nav ul {
 
 .hidden
 {
-	display: none;
+
+	display: none!important;
 	visibility: hidden;
 }
 
@@ -272,8 +280,23 @@ footer nav ul {
 	background-color: #fff;
 	color: #1D6154;
 	padding: 0 29px 0 29px;
+	font-family: "syne";
+	cursor: pointer;
+}
+
+button.hello
+{
+	background-color: #1D6154;
+	color: #fff;
 	
 }
+
+
+
+
+  /*.filtre button:clic {
+	color: red;
+  }*/
 
 /*#Objets
 {
@@ -366,6 +389,7 @@ footer nav ul {
 .ajoutPhoto 
 {
 
+	font-family: "syne";
 	width : 50%	;
 	height: 36px;
 	border-radius: 35px;
@@ -463,6 +487,7 @@ footer nav ul {
 
 .galery-modal button
 {
+	border-radius: 4px;
 	position: absolute;
 	top : 7px;
 	left : 40px;
@@ -582,4 +607,34 @@ input[type="file"]{
 {
 	margin-top: 100px;
 	width: 350px;
+}
+
+.edit_mode
+{
+	background-color: #000000;
+	height: 25px;
+}
+
+.edit_mode span
+{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.edit_mode a
+{
+	margin: 5px;
+	/*text-decoration: none;*/
+	color: #fff;
+}
+
+.edit_mode i
+{
+	color: #fff;
+}
+
+#error
+{
+	color: #D65353;
 }
